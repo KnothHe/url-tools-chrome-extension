@@ -8,19 +8,25 @@ function Popup() {
   const [paramRecord, setParamRecord] = useState<Record<string, string>>({});
 
   function handleParse() {
-    setParamRecord(getURLParameters(url));
+    const parsedRecord: Record<string, string> = getURLParameters(url);
+    if (parsedRecord) {
+      setParamRecord(parsedRecord);
+    }
   }
 
   function getModifiedURL() {
-    if (url) {
+    try {
+      const parsedURL = new URL(url);
       const searchParams = new URLSearchParams();
       Object.entries(paramRecord).forEach(([key, value]) => {
         searchParams.set(key, value);
       });
 
-      const parsedURL = new URL(url);
       parsedURL.search = searchParams.toString();
       return parsedURL.toString();
+    } catch (error) {
+      console.error("Invalid URL:", error);
+      return "";
     }
   }
 
