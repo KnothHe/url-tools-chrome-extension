@@ -1,7 +1,10 @@
+import { Button } from "@/components/ui/button";
+
 function Popup() {
   return (
     <>
-      <div>React App</div>
+      <div className="text-sky-400 underline">React App</div>
+      <Button>Click me</Button>
     </>
   );
 }
