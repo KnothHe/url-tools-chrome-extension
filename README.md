@@ -1,50 +1,74 @@
-# React + TypeScript + Vite
+# README.md
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# URL Parser Chrome Extension
 
-Currently, two official plugins are available:
+This project is a Chrome extension that allows users to input a URL, parse its parameters, and manipulate the URL in various ways. The extension provides a user-friendly interface for managing URLs, including features to remove UTM parameters and open modified URLs in different tabs.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- Input field for entering a URL
+- Parsing of URL parameters with a user-friendly display
+- Action buttons for opening modified URLs and clearing input
+- Preview of the modified URL
+- Clipboard access to read URLs directly from the clipboard
+- Support for removing UTM parameters from URLs
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Technologies Used
 
-- Configure the top-level `parserOptions` property like this:
+- React
+- TailwindCSS
+- Shadcn UI
+- Vite
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Installation
+
+1. Clone the repository:
+   ```
+   git clone <repository-url>
+   ```
+
+2. Navigate to the project directory:
+   ```
+   cd url-parser-extension
+   ```
+
+3. Install the dependencies:
+   ```
+   npm install
+   ```
+
+## Development
+
+To start the development server, run:
+```
+npm run dev
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+This will launch the application in development mode.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Building for Production
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+To build the extension for production, run:
 ```
+npm run build
+```
+
+This will create a production-ready version of the extension in the `dist` folder.
+
+## Loading the Extension in Chrome
+
+1. Open Chrome and navigate to `chrome://extensions/`.
+2. Enable "Developer mode" in the top right corner.
+3. Click on "Load unpacked" and select the `public` folder of the project.
+4. The extension should now be loaded and ready to use.
+
+## Usage
+
+- Click on the extension icon to open the popup.
+- Enter a URL in the input field.
+- The extension will parse the URL and display its parameters.
+- Use the action buttons to manipulate the URL as needed.
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for more details.
