@@ -28,6 +28,8 @@ function removeUTMParameters(url: string): Record<string, string> {
     "utm_campaign",
     "utm_term",
     "utm_content",
+    "share_source",
+    "vd_source",
   ];
   const params: Record<string, string> = {};
   parsedURL.searchParams.forEach((value, key) => {
