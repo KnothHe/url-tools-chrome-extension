@@ -15,6 +15,7 @@ This project is a Chrome extension that allows users to input a URL, parse its p
 
 ## Technologies Used
 
+- TypeScript
 - React
 - TailwindCSS
 - Shadcn UI
@@ -23,25 +24,26 @@ This project is a Chrome extension that allows users to input a URL, parse its p
 ## Installation
 
 1. Clone the repository:
+
    ```
-   git clone <repository-url>
+   git clone https://github.com/KnothHe/url-tools-chrome-extension.git
    ```
 
 2. Navigate to the project directory:
    ```
-   cd url-parser-extension
+   cd url-tools-chrome-extension
    ```
 
 3. Install the dependencies:
    ```
-   npm install
+   pnpm install
    ```
 
 ## Development
 
 To start the development server, run:
 ```
-npm run dev
+pnpm run dev
 ```
 
 This will launch the application in development mode.
@@ -50,7 +52,7 @@ This will launch the application in development mode.
 
 To build the extension for production, run:
 ```
-npm run build
+pnpm run build
 ```
 
 This will create a production-ready version of the extension in the `dist` folder.
@@ -59,7 +61,7 @@ This will create a production-ready version of the extension in the `dist` folde
 
 1. Open Chrome and navigate to `chrome://extensions/`.
 2. Enable "Developer mode" in the top right corner.
-3. Click on "Load unpacked" and select the `public` folder of the project.
+3. Click on "Load unpacked" and select the `dist` folder of the project.
 4. The extension should now be loaded and ready to use.
 
 ## Usage
@@ -68,6 +70,12 @@ This will create a production-ready version of the extension in the `dist` folde
 - Enter a URL in the input field.
 - The extension will parse the URL and display its parameters.
 - Use the action buttons to manipulate the URL as needed.
+
+## Todo
+
+- LocalStroge
+- Multilaguage
+- Theme
 
 ## License
 
