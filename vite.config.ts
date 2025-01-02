@@ -10,4 +10,15 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    open: "/options.html", // 指定要预览的 HTML 文件
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, "index.html"),
+        options: path.resolve(__dirname, "options.html"),
+      },
+    },
+  },
 });
