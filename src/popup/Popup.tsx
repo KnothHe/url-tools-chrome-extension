@@ -9,7 +9,7 @@ import {
   copyToClipboard,
   openURLInCurrentTab,
   openURLInNewTab,
-} from "./popupService";
+} from "@/utils/popupService";
 import {
   Tooltip,
   TooltipTrigger,
