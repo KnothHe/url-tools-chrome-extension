@@ -155,6 +155,7 @@ function Popup() {
               <TooltipTrigger asChild>
                 <Button
                   className="bg-black text-white hover:bg-gray-700 flex-shrink-0"
+                  size="icon"
                   onClick={handlePasteCurrentURL}
                 >
                   <Link className="h-4 w-4" />
@@ -168,6 +169,7 @@ function Popup() {
               <TooltipTrigger asChild>
                 <Button
                   className="bg-black text-white hover:bg-gray-700 flex-shrink-0"
+                  size="icon"
                   onClick={handlePasteFromClipboard}
                 >
                   <Clipboard className="h-4 w-4" />
@@ -181,6 +183,7 @@ function Popup() {
               <TooltipTrigger asChild>
                 <Button
                   className="bg-black text-white hover:bg-gray-700 flex-shrink-0"
+                  size="icon"
                   onClick={handleParse}
                 >
                   <Search className="h-4 w-4" />
@@ -214,6 +217,7 @@ function Popup() {
                     <TooltipTrigger asChild>
                       <Button
                         className="bg-black text-white hover:bg-gray-700 flex-shrink-0 ml-2"
+                        size="icon"
                         onClick={() => {
                           const newParamRecord = { ...paramRecord };
                           delete newParamRecord[key];
@@ -241,6 +245,7 @@ function Popup() {
               <TooltipTrigger asChild>
                 <Button
                   className="bg-black text-white hover:bg-gray-700 flex-shrink-0"
+                  size="icon"
                   onClick={handleRemoveUTMParameters}
                 >
                   <FilterX className="h-4 w-4" />
@@ -254,6 +259,7 @@ function Popup() {
               <TooltipTrigger asChild>
                 <Button
                   className="bg-black text-white hover:bg-gray-700 flex-shrink-0"
+                  size="icon"
                   onClick={async () => {
                     const modifiedURL = getModifiedURL();
                     if (modifiedURL) {
@@ -272,6 +278,7 @@ function Popup() {
               <TooltipTrigger asChild>
                 <Button
                   className="bg-black text-white hover:bg-gray-700 flex-shrink-0"
+                  size="icon"
                   onClick={async () => {
                     const modifiedURL = getModifiedURL();
                     if (modifiedURL) {
@@ -290,6 +297,7 @@ function Popup() {
               <TooltipTrigger asChild>
                 <Button
                   className="bg-black text-white hover:bg-gray-700 flex-shrink-0"
+                  size="icon"
                   onClick={handleCopyURL}
                 >
                   <Copy className="h-4 w-4" />
