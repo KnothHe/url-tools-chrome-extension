@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+  loadInitialSettings,
+  addUTMParam,
+  saveSettings,
+  updateJsonView,
+  editJson,
+} from "./optionsService";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -27,35 +34,28 @@ function Options() {
 
   // Load initial settings
   useEffect(() => {
-    chrome.storage.local.get(['utmParams'], (result) => {
-      if (result.utmParams) {
-        setUtmParams(result.utmParams);
-        setJsonView(JSON.stringify(result.utmParams, null, 2));
-      }
+    loadInitialSettings().then((params) => {
+      setUtmParams(params);
+      setJsonView(updateJsonView(params));
     });
   }, []);
 
   // Update JSON view when UTM params change
   useEffect(() => {
-    setJsonView(JSON.stringify(utmParams, null, 2));
+    setJsonView(updateJsonView(utmParams));
   }, [utmParams]);
 
-  const handleAddParam = () => {
-    if (newParam.trim() && !utmParams.includes(newParam.trim())) {
-      const updatedParams = [...utmParams, newParam.trim()];
+  const handleAddParam = async () => {
+    if (newParam.trim()) {
+      const updatedParams = await addUTMParam(utmParams, newParam.trim());
       setUtmParams(updatedParams);
       setNewParam("");
-      chrome.storage.local.set({ utmParams: updatedParams }, () => {
-        chrome.runtime.sendMessage({ type: "settingsUpdated" });
-      });
     }
   };
 
-  const handleSave = () => {
-    chrome.storage.local.set({ utmParams }, () => {
-      chrome.runtime.sendMessage({ type: "settingsUpdated" });
-      alert("Options saved successfully!");
-    });
+  const handleSave = async () => {
+    await saveSettings(utmParams);
+    alert("Options saved successfully!");
   };
 
   return (
@@ -175,14 +175,16 @@ function Options() {
                     <Button
                       onClick={() => {
                         try {
-                          const parsed = JSON.parse(editValue);
-                          if (Array.isArray(parsed)) {
-                            setUtmParams(parsed);
-                            setJsonView(JSON.stringify(parsed, null, 2));
-                            setIsEditing(false);
+                          const parsed = editJson(editValue);
+                          setUtmParams(parsed);
+                          setJsonView(updateJsonView(parsed));
+                          setIsEditing(false);
+                        } catch (error: unknown) {
+                          if (error instanceof Error) {
+                            console.error(error.message);
+                          } else {
+                            console.error('An unknown error occurred');
                           }
-                        } catch (error) {
-                          console.error("Invalid JSON:", error);
                         }
                       }}
                     >
