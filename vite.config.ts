@@ -11,7 +11,7 @@ export default defineConfig({
     },
   },
   server: {
-    open: "/options.html", // 指定要预览的 HTML 文件
+    open: "/options.html",
   },
   build: {
     rollupOptions: {

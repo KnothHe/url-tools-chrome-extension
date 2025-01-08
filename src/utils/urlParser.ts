@@ -18,19 +18,10 @@ function getURLParameters(url: string): Record<string, string> {
   return params;
 }
 
-function removeUTMParameters(url: string): Record<string, string> {
+function removeUTMParameters(url: string, utmParams: string[]): Record<string, string> {
   const parsedURL = parseURL(url);
   if (!parsedURL) return {};
 
-  const utmParams = [
-    "utm_source",
-    "utm_medium",
-    "utm_campaign",
-    "utm_term",
-    "utm_content",
-    "share_source",
-    "vd_source",
-  ];
   const params: Record<string, string> = {};
   parsedURL.searchParams.forEach((value, key) => {
     if (!utmParams.includes(key)) {

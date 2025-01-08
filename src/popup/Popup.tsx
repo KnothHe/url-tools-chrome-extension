@@ -1,11 +1,20 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getURLParameters, removeUTMParameters } from "@/utils/urlParser";
 
 function Popup() {
   const [url, setUrl] = useState("");
   const [paramRecord, setParamRecord] = useState<Record<string, string>>({});
+  const [utmParams, setUtmParams] = useState<string[]>([]);
+
+  useEffect(() => {
+    chrome.storage.local.get(["utmParams"], (result) => {
+      if (result.utmParams) {
+        setUtmParams(result.utmParams);
+      }
+    });
+  }, []);
 
   function handleParse() {
     const parsedRecord: Record<string, string> = getURLParameters(url);
@@ -39,7 +48,10 @@ function Popup() {
 
   function handleRemoveUTMParameters() {
     if (url) {
-      const noUtmParams: Record<string, string> = removeUTMParameters(url);
+      const noUtmParams: Record<string, string> = removeUTMParameters(
+        url,
+        utmParams
+      );
       setParamRecord(noUtmParams);
       const searchParams = new URLSearchParams();
       Object.entries(noUtmParams).forEach(([key, value]) => {
