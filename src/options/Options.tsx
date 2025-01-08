@@ -7,6 +7,7 @@ import {
   saveSettings,
   updateJsonView,
   editJson,
+  OptionSetting,
 } from "@/utils/optionsService";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,6 +30,7 @@ import i18n from "@/i18n";
 
 function Options() {
   const [utmParams, setUtmParams] = useState<string[]>([]);
+  const [lang, setLang] = useState("en");
   const [newParam, setNewParam] = useState("");
   const [jsonView, setJsonView] = useState("");
   const { t } = useTranslation();
@@ -37,9 +39,15 @@ function Options() {
 
   // Load initial settings
   useEffect(() => {
-    loadInitialSettings().then((params) => {
-      setUtmParams(params);
-      setJsonView(updateJsonView(params));
+    loadInitialSettings().then((optionSetting) => {
+      if (optionSetting.lang) {
+        i18n.changeLanguage(optionSetting.lang);
+        setLang(optionSetting.lang);
+      }
+      if (optionSetting.utmParams) {
+        setUtmParams(optionSetting.utmParams);
+        setJsonView(updateJsonView(optionSetting.utmParams));
+      }
     });
   }, []);
 
@@ -57,8 +65,9 @@ function Options() {
   };
 
   const handleSave = async () => {
-    await saveSettings(utmParams);
-    alert(t("options.saveSuccess"));
+    const optionSetting: OptionSetting = { utmParams, lang };
+    i18n.changeLanguage(lang);
+    saveSettings(optionSetting).then(() => alert(t("options.saveSuccess")));
   };
 
   return (
@@ -70,9 +79,11 @@ function Options() {
         <Button
           variant="ghost"
           size="icon"
-          onClick={() =>
-            i18n.changeLanguage(i18n.language === "en" ? "zh-CN" : "en")
-          }
+          onClick={() => {
+            const localLang = i18n.language == "en" ? "zh-CN" : "en";
+            setLang(i18n.language == "en" ? "zh-CN" : "en");
+            i18n.changeLanguage(localLang);
+          }}
         >
           {i18n.language === "en" ? "中" : "EN"}
         </Button>

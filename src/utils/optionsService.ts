@@ -1,10 +1,15 @@
+export interface OptionSetting {
+  utmParams: string[];
+  lang: string;
+}
+
 export const loadInitialSettings = async () => {
-  return new Promise<string[]>((resolve) => {
-    chrome.storage.local.get(['utmParams'], (result) => {
-      if (result.utmParams) {
-        resolve(result.utmParams);
+  return new Promise<OptionSetting>((resolve) => {
+    chrome.storage.local.get(['options'], (result) => {
+      if (result.options) {
+        resolve(result.options);
       } else {
-        resolve([]);
+        resolve({ utmParams: [], lang: 'en' });
       }
     });
   });
@@ -12,21 +17,14 @@ export const loadInitialSettings = async () => {
 
 export const addUTMParam = async (params: string[], newParam: string) => {
   if (newParam.trim() && !params.includes(newParam.trim())) {
-    const updatedParams = [...params, newParam.trim()];
-    await new Promise<void>((resolve) => {
-      chrome.storage.local.set({ utmParams: updatedParams }, () => {
-        chrome.runtime.sendMessage({ type: "settingsUpdated" });
-        resolve();
-      });
-    });
-    return updatedParams;
+    return [...params, newParam.trim()];
   }
   return params;
 };
 
-export const saveSettings = async (params: string[]) => {
+export const saveSettings = async (optionSetting: OptionSetting) => {
   await new Promise<void>((resolve) => {
-    chrome.storage.local.set({ utmParams: params }, () => {
+    chrome.storage.local.set({ options: optionSetting }, () => {
       chrome.runtime.sendMessage({ type: "settingsUpdated" });
       resolve();
     });
