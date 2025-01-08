@@ -20,7 +20,6 @@ import {
 import { getURLParameters } from "@/utils/urlParser";
 import { useEffect, useState, useCallback } from "react";
 import {
-  Search,
   Trash2,
   Copy,
   FilterX,
@@ -47,9 +46,9 @@ function Popup() {
         setParamRecord(parsedRecord);
       } catch (error: unknown) {
         if (error instanceof Error) {
-          console.log('Failed to parse URL:', error.message);
+          console.log("Failed to parse URL:", error.message);
         } else {
-          console.log('Failed to parse URL');
+          console.log("Failed to parse URL");
         }
       }
     }
@@ -67,7 +66,7 @@ function Popup() {
       if (error instanceof Error) {
         alert(error.message);
       } else {
-        alert('An unknown error occurred');
+        alert("An unknown error occurred");
       }
     }
   };
@@ -80,7 +79,7 @@ function Popup() {
       if (error instanceof Error) {
         alert(error.message);
       } else {
-        alert('An unknown error occurred');
+        alert("An unknown error occurred");
       }
     }
   };
@@ -92,9 +91,9 @@ function Popup() {
       if (error instanceof Error) {
         console.log(error.message);
       } else {
-        console.log('An unknown error occurred');
+        console.log("An unknown error occurred");
       }
-      return '';
+      return "";
     }
   };
 
@@ -105,9 +104,9 @@ function Popup() {
         await copyToClipboard(modifiedURL);
       } catch (error: unknown) {
         if (error instanceof Error) {
-          console.log('Failed to copy URL:', error.message);
+          console.log("Failed to copy URL:", error.message);
         } else {
-          console.log('Failed to copy URL');
+          console.log("Failed to copy URL");
         }
       }
     }
@@ -122,9 +121,9 @@ function Popup() {
         return modifiedURL;
       } catch (error: unknown) {
         if (error instanceof Error) {
-          console.log('Failed to remove UTM parameters:', error.message);
+          console.log("Failed to remove UTM parameters:", error.message);
         } else {
-          console.log('Failed to remove UTM parameters');
+          console.log("Failed to remove UTM parameters");
         }
       }
     }
@@ -136,7 +135,7 @@ function Popup() {
         <div className="w-[600px] w-max-[800px] h-max[600px] bg-white p-4 rounded-lg shadow-lg">
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-xl font-semibold">URL Tools</h1>
-            <Button 
+            <Button
               variant="ghost"
               size="icon"
               onClick={() => openOptionsPage()}
@@ -177,20 +176,6 @@ function Popup() {
               </TooltipTrigger>
               <TooltipContent>
                 <p>Paste URL from clipboard</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  className="bg-black text-white hover:bg-gray-700 flex-shrink-0"
-                  size="icon"
-                  onClick={handleParse}
-                >
-                  <Search className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Parse URL parameters</p>
               </TooltipContent>
             </Tooltip>
           </div>
