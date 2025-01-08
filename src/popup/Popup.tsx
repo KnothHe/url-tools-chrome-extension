@@ -1,11 +1,22 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
+  loadUTMParams,
+  getCurrentTabURL,
+  getClipboardURL,
+  generateModifiedURL,
+  removeUTMParams,
+  copyToClipboard,
+  openURLInCurrentTab,
+  openURLInNewTab,
+} from "./popupService";
+import {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
   TooltipProvider,
 } from "@/components/ui/tooltip";
+import { getURLParameters } from "@/utils/urlParser";
 import { useEffect, useState, useCallback } from "react";
 import {
   Search,
@@ -17,7 +28,6 @@ import {
   Link,
   Clipboard,
 } from "lucide-react";
-import { getURLParameters, removeUTMParameters } from "@/utils/urlParser";
 
 function Popup() {
   const [url, setUrl] = useState("");
@@ -25,116 +35,98 @@ function Popup() {
   const [utmParams, setUtmParams] = useState<string[]>([]);
 
   useEffect(() => {
-    chrome.storage.local.get(["utmParams"], (result) => {
-      if (result.utmParams) {
-        setUtmParams(result.utmParams);
-      }
-    });
+    loadUTMParams().then(setUtmParams);
   }, []);
 
-  const handleParse = useCallback(() => {
-    const parsedRecord: Record<string, string> = getURLParameters(url);
-    if (parsedRecord) {
-      setParamRecord(parsedRecord);
+  const handleParse = useCallback(async () => {
+    if (url) {
+      try {
+        const parsedRecord = getURLParameters(url);
+        setParamRecord(parsedRecord);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.error('Failed to parse URL:', error.message);
+        } else {
+          console.error('Failed to parse URL');
+        }
+      }
     }
   }, [url]);
 
   useEffect(() => {
-    if (url) {
-      handleParse();
-    }
+    handleParse();
   }, [url, handleParse]);
 
-  function handlePasteCurrentURL() {
-    chrome.tabs.query({
-      active: true,
-      currentWindow: true,
-    })
-    .then((tabs) => {
-      const [tab] = tabs;
-      if (!tab?.url) {
-        alert("No active tab URL found");
-        return;
-      }
-
-      // Check if URL is accessible (not a chrome:// page)
-      if (
-        tab.url.startsWith("chrome://") ||
-        tab.url.startsWith("chrome-extension://")
-      ) {
-        alert("Cannot access chrome internal pages");
-        return;
-      }
-
-      setUrl(tab.url);
-    })
-    .catch((error) => {
-      console.error("Error getting current URL:", error);
-    });
-  }
-
-  function handlePasteFromClipboard() {
-    navigator.clipboard
-      .readText()
-      .then((text) => {
-        if (text && isValidUrl(text)) {
-          setUrl(text);
-        }
-      })
-      .catch((error) => {
-        console.error("Failed to read clipboard:", error);
-      });
-  }
-
-  function isValidUrl(url: string) {
+  const handlePasteCurrentURL = async () => {
     try {
-      new URL(url);
-      return true;
-    } catch {
-      return false;
+      const currentURL = await getCurrentTabURL();
+      setUrl(currentURL);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert('An unknown error occurred');
+      }
     }
-  }
+  };
 
-  function getModifiedURL() {
+  const handlePasteFromClipboard = async () => {
     try {
-      const parsedURL = new URL(url);
-      const searchParams = new URLSearchParams();
-      Object.entries(paramRecord).forEach(([key, value]) => {
-        searchParams.set(key, value);
-      });
-
-      parsedURL.search = searchParams.toString();
-      return parsedURL.toString();
-    } catch (error) {
-      console.error("Invalid URL:", error);
-      return "";
+      const clipboardURL = await getClipboardURL();
+      setUrl(clipboardURL);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert('An unknown error occurred');
+      }
     }
-  }
+  };
 
-  function handleCopyURL() {
+  const getModifiedURL = () => {
+    try {
+      return generateModifiedURL(url, paramRecord);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      } else {
+        console.error('An unknown error occurred');
+      }
+      return '';
+    }
+  };
+
+  const handleCopyURL = async () => {
     const modifiedURL = getModifiedURL();
     if (modifiedURL) {
-      navigator.clipboard.writeText(modifiedURL);
+      try {
+        await copyToClipboard(modifiedURL);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.error('Failed to copy URL:', error.message);
+        } else {
+          console.error('Failed to copy URL');
+        }
+      }
     }
-  }
+  };
 
-  function handleRemoveUTMParameters() {
+  const handleRemoveUTMParameters = () => {
     if (url) {
-      const noUtmParams: Record<string, string> = removeUTMParameters(
-        url,
-        utmParams
-      );
-      setParamRecord(noUtmParams);
-      const searchParams = new URLSearchParams();
-      Object.entries(noUtmParams).forEach(([key, value]) => {
-        searchParams.set(key, value);
-      });
-
-      const parsedURL = new URL(url);
-      parsedURL.search = searchParams.toString();
-      return parsedURL.toString();
+      try {
+        const modifiedURL = removeUTMParams(url, utmParams);
+        const parsedRecord = getURLParameters(modifiedURL);
+        setParamRecord(parsedRecord);
+        return modifiedURL;
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.error('Failed to remove UTM parameters:', error.message);
+        } else {
+          console.error('Failed to remove UTM parameters');
+        }
+      }
     }
-  }
+  };
 
   return (
     <>
@@ -250,10 +242,10 @@ function Popup() {
               <TooltipTrigger asChild>
                 <Button
                   className="bg-black text-white hover:bg-gray-700 flex-shrink-0"
-                  onClick={() => {
+                  onClick={async () => {
                     const modifiedURL = getModifiedURL();
                     if (modifiedURL) {
-                      chrome.tabs.update({ url: modifiedURL });
+                      openURLInCurrentTab(modifiedURL);
                     }
                   }}
                 >
@@ -268,10 +260,10 @@ function Popup() {
               <TooltipTrigger asChild>
                 <Button
                   className="bg-black text-white hover:bg-gray-700 flex-shrink-0"
-                  onClick={() => {
+                  onClick={async () => {
                     const modifiedURL = getModifiedURL();
                     if (modifiedURL) {
-                      chrome.tabs.create({ url: modifiedURL });
+                      openURLInNewTab(modifiedURL);
                     }
                   }}
                 >
