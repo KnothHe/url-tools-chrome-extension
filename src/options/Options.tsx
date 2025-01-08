@@ -150,7 +150,7 @@ function Options() {
                     try {
                       await navigator.clipboard.writeText(jsonView);
                     } catch (error) {
-                      console.error("Failed to copy:", error);
+                      console.log("Failed to copy:", error);
                     }
                   }}
                 >
@@ -181,9 +181,9 @@ function Options() {
                           setIsEditing(false);
                         } catch (error: unknown) {
                           if (error instanceof Error) {
-                            console.error(error.message);
+                            console.log(error.message);
                           } else {
-                            console.error('An unknown error occurred');
+                            console.log('An unknown error occurred');
                           }
                         }
                       }}

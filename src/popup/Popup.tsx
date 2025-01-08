@@ -45,9 +45,9 @@ function Popup() {
         setParamRecord(parsedRecord);
       } catch (error: unknown) {
         if (error instanceof Error) {
-          console.error('Failed to parse URL:', error.message);
+          console.log('Failed to parse URL:', error.message);
         } else {
-          console.error('Failed to parse URL');
+          console.log('Failed to parse URL');
         }
       }
     }
@@ -88,9 +88,9 @@ function Popup() {
       return generateModifiedURL(url, paramRecord);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.error(error.message);
+        console.log(error.message);
       } else {
-        console.error('An unknown error occurred');
+        console.log('An unknown error occurred');
       }
       return '';
     }
@@ -103,9 +103,9 @@ function Popup() {
         await copyToClipboard(modifiedURL);
       } catch (error: unknown) {
         if (error instanceof Error) {
-          console.error('Failed to copy URL:', error.message);
+          console.log('Failed to copy URL:', error.message);
         } else {
-          console.error('Failed to copy URL');
+          console.log('Failed to copy URL');
         }
       }
     }
@@ -120,9 +120,9 @@ function Popup() {
         return modifiedURL;
       } catch (error: unknown) {
         if (error instanceof Error) {
-          console.error('Failed to remove UTM parameters:', error.message);
+          console.log('Failed to remove UTM parameters:', error.message);
         } else {
-          console.error('Failed to remove UTM parameters');
+          console.log('Failed to remove UTM parameters');
         }
       }
     }

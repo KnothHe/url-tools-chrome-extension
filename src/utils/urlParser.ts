@@ -2,7 +2,7 @@ function parseURL(url: string): URL | null {
   try {
     return new URL(url);
   } catch (error) {
-    console.error("Invalid URL:", error);
+    console.log("Invalid URL:", error);
     return null;
   }
 }
