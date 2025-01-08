@@ -9,6 +9,7 @@ import {
   copyToClipboard,
   openURLInCurrentTab,
   openURLInNewTab,
+  openOptionsPage,
 } from "@/utils/popupService";
 import {
   Tooltip,
@@ -138,7 +139,7 @@ function Popup() {
             <Button 
               variant="ghost"
               size="icon"
-              onClick={() => chrome.runtime.openOptionsPage()}
+              onClick={() => openOptionsPage()}
             >
               <Settings className="h-5 w-5" />
             </Button>

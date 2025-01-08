@@ -88,3 +88,7 @@ export const openURLInCurrentTab = (url: string) => {
 export const openURLInNewTab = (url: string) => {
   chrome.tabs.create({ url });
 };
+
+export const openOptionsPage = () => {
+  chrome.runtime.openOptionsPage();
+};
