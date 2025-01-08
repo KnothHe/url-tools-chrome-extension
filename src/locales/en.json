@@ -1,0 +1,33 @@
+{
+  "popup": {
+    "title": "URL Tools",
+    "inputPlaceholder": "Enter URL",
+    "tooltips": {
+      "pasteCurrent": "Paste current page URL",
+      "pasteClipboard": "Paste URL from clipboard",
+      "removeParam": "Remove parameter",
+      "removeUTM": "Remove UTM parameters",
+      "openCurrent": "Open in current tab",
+      "openNew": "Open in new tab",
+      "copyURL": "Copy modified URL"
+    }
+  },
+  "options": {
+    "title": "Options",
+    "jsonLabel": "UTM Parameters JSON View",
+    "jsonTooltip": "This shows your UTM parameters in JSON format. JSON is a structured way to represent data that both humans and computers can understand. Each parameter is listed as a string in an array.",
+    "formatTooltip": "The square brackets [ ] indicate an array, and each parameter is wrapped in quotes. This format ensures your parameters can be properly saved and used by the extension.",
+    "addParam": {
+      "title": "Add UTM Parameter",
+      "placeholder": "Enter new UTM parameter",
+      "button": "Add Parameter"
+    },
+    "editJson": {
+      "title": "Edit JSON",
+      "cancel": "Cancel",
+      "save": "Save"
+    },
+    "saveButton": "Save Settings",
+    "saveSuccess": "Options saved successfully!"
+  }
+}

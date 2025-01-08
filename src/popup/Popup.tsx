@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/tooltip";
 import { getURLParameters } from "@/utils/urlParser";
 import { useEffect, useState, useCallback } from "react";
+import { useTranslation } from 'react-i18next';
 import {
   Trash2,
   Copy,
@@ -31,6 +32,7 @@ import {
 } from "lucide-react";
 
 function Popup() {
+  const { t } = useTranslation();
   const [url, setUrl] = useState("");
   const [paramRecord, setParamRecord] = useState<Record<string, string>>({});
   const [utmParams, setUtmParams] = useState<string[]>([]);
@@ -134,19 +136,21 @@ function Popup() {
       <TooltipProvider>
         <div className="w-[600px] w-max-[800px] h-max[600px] bg-white p-4 rounded-lg shadow-lg">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-xl font-semibold">URL Tools</h1>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => openOptionsPage()}
-            >
-              <Settings className="h-5 w-5" />
-            </Button>
+            <h1 className="text-xl font-semibold">{t('popup.title')}</h1>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => openOptionsPage()}
+              >
+                <Settings className="h-5 w-5" />
+              </Button>
+            </div>
           </div>
           <div className="flex flex-row items-center space-x-4">
             <Input
               className="border p-2 rounded text-gray-700 flex-1"
-              placeholder="Enter URL"
+              placeholder={t('popup.inputPlaceholder')}
               value={url}
               onChange={(e) => setUrl(e.target.value)}
             />
@@ -161,7 +165,7 @@ function Popup() {
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Paste current page URL</p>
+                <p>{t('popup.tooltips.pasteCurrent')}</p>
               </TooltipContent>
             </Tooltip>
             <Tooltip>
@@ -175,7 +179,7 @@ function Popup() {
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Paste URL from clipboard</p>
+                <p>{t('popup.tooltips.pasteClipboard')}</p>
               </TooltipContent>
             </Tooltip>
           </div>
@@ -213,7 +217,7 @@ function Popup() {
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>Remove parameter</p>
+                      <p>{t('popup.tooltips.removeParam')}</p>
                     </TooltipContent>
                   </Tooltip>
                 </div>
@@ -237,7 +241,7 @@ function Popup() {
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Remove UTM parameters</p>
+                <p>{t('popup.tooltips.removeUTM')}</p>
               </TooltipContent>
             </Tooltip>
             <Tooltip>
@@ -256,7 +260,7 @@ function Popup() {
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Open in current tab</p>
+                <p>{t('popup.tooltips.openCurrent')}</p>
               </TooltipContent>
             </Tooltip>
             <Tooltip>
@@ -275,7 +279,7 @@ function Popup() {
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Open in new tab</p>
+                <p>{t('popup.tooltips.openNew')}</p>
               </TooltipContent>
             </Tooltip>
             <Tooltip>
@@ -289,7 +293,7 @@ function Popup() {
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Copy modified URL</p>
+                <p>{t('popup.tooltips.copyURL')}</p>
               </TooltipContent>
             </Tooltip>
           </div>
@@ -300,3 +304,4 @@ function Popup() {
 }
 
 export default Popup;
+

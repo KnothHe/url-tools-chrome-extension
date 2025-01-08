@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   loadInitialSettings,
@@ -24,11 +25,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import i18n from "@/i18n";
 
 function Options() {
   const [utmParams, setUtmParams] = useState<string[]>([]);
   const [newParam, setNewParam] = useState("");
   const [jsonView, setJsonView] = useState("");
+  const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState("");
 
@@ -55,31 +58,37 @@ function Options() {
 
   const handleSave = async () => {
     await saveSettings(utmParams);
-    alert("Options saved successfully!");
+    alert(t("options.saveSuccess"));
   };
 
   return (
     <div className="p-4 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6 text-slate-600 underline">
-        Options
-      </h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold mb-6 text-slate-600 underline">
+          {t("options.title")}
+        </h1>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() =>
+            i18n.changeLanguage(i18n.language === "en" ? "zh-CN" : "en")
+          }
+        >
+          {i18n.language === "en" ? "中" : "EN"}
+        </Button>
+      </div>
 
       <div className="space-y-4">
         <div>
           <div className="flex items-center gap-2">
-            <Label>UTM Parameters JSON View</Label>
+            <Label>{t("options.jsonLabel")}</Label>
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <HelpCircle className="h-4 w-4 text-muted-foreground" />
                 </TooltipTrigger>
                 <TooltipContent className="max-w-[300px]">
-                  <p className="text-sm">
-                    This shows your UTM parameters in JSON format. JSON is a
-                    structured way to represent data that both humans and
-                    computers can understand. Each parameter is listed as a
-                    string in an array.
-                  </p>
+                  <p className="text-sm">{t("options.jsonTooltip")}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -95,11 +104,7 @@ function Options() {
                   />
                 </TooltipTrigger>
                 <TooltipContent className="max-w-[300px]">
-                  <p className="text-sm">
-                    The square brackets [ ] indicate an array, and each
-                    parameter is wrapped in quotes. This format ensures your
-                    parameters can be properly saved and used by the extension.
-                  </p>
+                  <p className="text-sm">{t("options.formatTooltip")}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -124,19 +129,19 @@ function Options() {
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
-                        <DialogTitle>Add UTM Parameter</DialogTitle>
+                        <DialogTitle>{t("options.addParam.title")}</DialogTitle>
                       </DialogHeader>
                       <div className="space-y-4">
                         <Input
                           value={newParam}
                           onChange={(e) => setNewParam(e.target.value)}
-                          placeholder="Enter new UTM parameter"
+                          placeholder={t("options.addParam.placeholder")}
                         />
                         <Button
                           onClick={handleAddParam}
                           disabled={!newParam.trim()}
                         >
-                          Add Parameter
+                          {t("options.addParam.button")}
                         </Button>
                       </div>
                     </DialogContent>
@@ -158,7 +163,7 @@ function Options() {
                 </Button>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Edit JSON</DialogTitle>
+                    <DialogTitle>{t("options.editJson.title")}</DialogTitle>
                   </DialogHeader>
                   <Textarea
                     value={editValue}
@@ -170,7 +175,7 @@ function Options() {
                       variant="outline"
                       onClick={() => setIsEditing(false)}
                     >
-                      Cancel
+                      {t("options.editJson.cancel")}
                     </Button>
                     <Button
                       onClick={() => {
@@ -183,12 +188,12 @@ function Options() {
                           if (error instanceof Error) {
                             console.log(error.message);
                           } else {
-                            console.log('An unknown error occurred');
+                            console.log("An unknown error occurred");
                           }
                         }
                       }}
                     >
-                      Save
+                      {t("options.editJson.save")}
                     </Button>
                   </div>
                 </DialogContent>
@@ -200,7 +205,7 @@ function Options() {
 
       <div className="mt-6">
         <Button className="w-full" onClick={handleSave}>
-          Save Settings
+          {t("options.saveButton")}
         </Button>
       </div>
     </div>
