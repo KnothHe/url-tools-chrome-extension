@@ -14,6 +14,7 @@
   },
   "options": {
     "title": "选项",
+    "languageLabel": "语言",
     "jsonLabel": "UTM参数JSON视图",
     "jsonTooltip": "这里以JSON格式显示您的UTM参数。JSON是一种结构化的数据表示方式，人类和计算机都能理解。每个参数都以字符串形式列在数组中。",
     "formatTooltip": "方括号[]表示数组，每个参数都用引号包裹。这种格式确保您的参数可以被扩展程序正确保存和使用。",

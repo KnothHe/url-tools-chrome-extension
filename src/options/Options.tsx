@@ -2,6 +2,13 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   loadInitialSettings,
   addUTMParam,
   saveSettings,
@@ -76,20 +83,27 @@ function Options() {
         <h1 className="text-2xl font-bold mb-6 text-slate-600 underline">
           {t("options.title")}
         </h1>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => {
-            const localLang = i18n.language == "en" ? "zh-CN" : "en";
-            setLang(i18n.language == "en" ? "zh-CN" : "en");
-            i18n.changeLanguage(localLang);
-          }}
-        >
-          {i18n.language === "en" ? "中" : "EN"}
-        </Button>
       </div>
 
       <div className="space-y-4">
+        <div className="space-y-2">
+          <Label>{t("options.languageLabel")}</Label>
+          <Select
+            value={lang}
+            onValueChange={(newLang) => {
+              setLang(newLang);
+              i18n.changeLanguage(newLang);
+            }}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select language" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="en">English</SelectItem>
+              <SelectItem value="zh-CN">中文</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
         <div>
           <div className="flex items-center gap-2">
             <Label>{t("options.jsonLabel")}</Label>
@@ -131,33 +145,31 @@ function Options() {
                     <Pencil className="h-4 w-4" />
                   </Button>
                 </DialogTrigger>
-                <DialogTrigger asChild>
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button variant="ghost" size="icon" className="mt-2">
-                        <Plus className="h-4 w-4" />
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="ghost" size="icon" className="mt-2">
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>{t("options.addParam.title")}</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                      <Input
+                        value={newParam}
+                        onChange={(e) => setNewParam(e.target.value)}
+                        placeholder={t("options.addParam.placeholder")}
+                      />
+                      <Button
+                        onClick={handleAddParam}
+                        disabled={!newParam.trim()}
+                      >
+                        {t("options.addParam.button")}
                       </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>{t("options.addParam.title")}</DialogTitle>
-                      </DialogHeader>
-                      <div className="space-y-4">
-                        <Input
-                          value={newParam}
-                          onChange={(e) => setNewParam(e.target.value)}
-                          placeholder={t("options.addParam.placeholder")}
-                        />
-                        <Button
-                          onClick={handleAddParam}
-                          disabled={!newParam.trim()}
-                        >
-                          {t("options.addParam.button")}
-                        </Button>
-                      </div>
-                    </DialogContent>
-                  </Dialog>
-                </DialogTrigger>
+                    </div>
+                  </DialogContent>
+                </Dialog>
                 <Button
                   variant="ghost"
                   size="icon"

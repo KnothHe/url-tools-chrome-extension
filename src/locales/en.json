@@ -14,6 +14,7 @@
   },
   "options": {
     "title": "Options",
+    "languageLabel": "Language",
     "jsonLabel": "UTM Parameters JSON View",
     "jsonTooltip": "This shows your UTM parameters in JSON format. JSON is a structured way to represent data that both humans and computers can understand. Each parameter is listed as a string in an array.",
     "formatTooltip": "The square brackets [ ] indicate an array, and each parameter is wrapped in quotes. This format ensures your parameters can be properly saved and used by the extension.",
