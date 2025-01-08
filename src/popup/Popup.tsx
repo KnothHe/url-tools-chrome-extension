@@ -6,7 +6,7 @@ import {
   TooltipContent,
   TooltipProvider,
 } from "@/components/ui/tooltip";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   Search,
   Trash2,
@@ -14,6 +14,8 @@ import {
   FilterX,
   ExternalLink,
   PlusSquare,
+  Link,
+  Clipboard,
 } from "lucide-react";
 import { getURLParameters, removeUTMParameters } from "@/utils/urlParser";
 
@@ -30,10 +32,66 @@ function Popup() {
     });
   }, []);
 
-  function handleParse() {
+  const handleParse = useCallback(() => {
     const parsedRecord: Record<string, string> = getURLParameters(url);
     if (parsedRecord) {
       setParamRecord(parsedRecord);
+    }
+  }, [url]);
+
+  useEffect(() => {
+    if (url) {
+      handleParse();
+    }
+  }, [url, handleParse]);
+
+  function handlePasteCurrentURL() {
+    chrome.tabs.query({
+      active: true,
+      currentWindow: true,
+    })
+    .then((tabs) => {
+      const [tab] = tabs;
+      if (!tab?.url) {
+        alert("No active tab URL found");
+        return;
+      }
+
+      // Check if URL is accessible (not a chrome:// page)
+      if (
+        tab.url.startsWith("chrome://") ||
+        tab.url.startsWith("chrome-extension://")
+      ) {
+        alert("Cannot access chrome internal pages");
+        return;
+      }
+
+      setUrl(tab.url);
+    })
+    .catch((error) => {
+      console.error("Error getting current URL:", error);
+    });
+  }
+
+  function handlePasteFromClipboard() {
+    navigator.clipboard
+      .readText()
+      .then((text) => {
+        if (text && isValidUrl(text)) {
+          setUrl(text);
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to read clipboard:", error);
+      });
+  }
+
+  function isValidUrl(url: string) {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
     }
   }
 
@@ -89,6 +147,32 @@ function Popup() {
               value={url}
               onChange={(e) => setUrl(e.target.value)}
             />
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  className="bg-black text-white hover:bg-gray-700 flex-shrink-0"
+                  onClick={handlePasteCurrentURL}
+                >
+                  <Link className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Paste current page URL</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  className="bg-black text-white hover:bg-gray-700 flex-shrink-0"
+                  onClick={handlePasteFromClipboard}
+                >
+                  <Clipboard className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Paste URL from clipboard</p>
+              </TooltipContent>
+            </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
