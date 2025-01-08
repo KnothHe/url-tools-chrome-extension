@@ -10,7 +10,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Pencil, Copy } from "lucide-react";
+import { Pencil, Copy, Plus, HelpCircle } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 function Options() {
   const [utmParams, setUtmParams] = useState<string[]>([]);
@@ -39,12 +45,16 @@ function Options() {
       const updatedParams = [...utmParams, newParam.trim()];
       setUtmParams(updatedParams);
       setNewParam("");
+      chrome.storage.local.set({ utmParams: updatedParams }, () => {
+        chrome.runtime.sendMessage({ type: "settingsUpdated" });
+      });
     }
   };
 
   const handleSave = () => {
     chrome.storage.local.set({ utmParams }, () => {
       chrome.runtime.sendMessage({ type: "settingsUpdated" });
+      alert("Options saved successfully!");
     });
   };
 
@@ -56,41 +66,44 @@ function Options() {
 
       <div className="space-y-4">
         <div>
-          <Label htmlFor="utm-params">UTM Parameters</Label>
-          <div className="flex gap-2 mt-2">
-            <Input
-              id="utm-params"
-              value={newParam}
-              onChange={(e) => setNewParam(e.target.value)}
-              placeholder="Add new UTM parameter"
-            />
-            <Button onClick={handleAddParam}>Add</Button>
+          <div className="flex items-center gap-2">
+            <Label>UTM Parameters JSON View</Label>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                </TooltipTrigger>
+                <TooltipContent className="max-w-[300px]">
+                  <p className="text-sm">
+                    This shows your UTM parameters in JSON format. JSON is a
+                    structured way to represent data that both humans and
+                    computers can understand. Each parameter is listed as a
+                    string in an array.
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
-        </div>
-
-        <div>
-          <Label>JSON View</Label>
           <div className="flex items-start gap-2">
-            <Textarea
-              value={jsonView}
-              readOnly
-              className="mt-2 h-32 font-mono text-sm flex-1"
-            />
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Textarea
+                    value={jsonView}
+                    readOnly
+                    className="mt-2 h-32 font-mono text-sm flex-1"
+                  />
+                </TooltipTrigger>
+                <TooltipContent className="max-w-[300px]">
+                  <p className="text-sm">
+                    The square brackets [ ] indicate an array, and each
+                    parameter is wrapped in quotes. This format ensures your
+                    parameters can be properly saved and used by the extension.
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <div className="flex flex-col gap-1">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="mt-2"
-                onClick={async () => {
-                  try {
-                    await navigator.clipboard.writeText(jsonView);
-                  } catch (error) {
-                    console.error("Failed to copy:", error);
-                  }
-                }}
-              >
-                <Copy className="h-4 w-4" />
-              </Button>
               <Dialog open={isEditing} onOpenChange={setIsEditing}>
                 <DialogTrigger asChild>
                   <Button
@@ -102,6 +115,47 @@ function Options() {
                     <Pencil className="h-4 w-4" />
                   </Button>
                 </DialogTrigger>
+                <DialogTrigger asChild>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="ghost" size="icon" className="mt-2">
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Add UTM Parameter</DialogTitle>
+                      </DialogHeader>
+                      <div className="space-y-4">
+                        <Input
+                          value={newParam}
+                          onChange={(e) => setNewParam(e.target.value)}
+                          placeholder="Enter new UTM parameter"
+                        />
+                        <Button
+                          onClick={handleAddParam}
+                          disabled={!newParam.trim()}
+                        >
+                          Add Parameter
+                        </Button>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </DialogTrigger>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="mt-2"
+                  onClick={async () => {
+                    try {
+                      await navigator.clipboard.writeText(jsonView);
+                    } catch (error) {
+                      console.error("Failed to copy:", error);
+                    }
+                  }}
+                >
+                  <Copy className="h-4 w-4" />
+                </Button>
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>Edit JSON</DialogTitle>
