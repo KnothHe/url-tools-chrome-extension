@@ -12,6 +12,9 @@ This project is a Chrome extension that allows users to input a URL, parse its p
 - Preview of the modified URL
 - Clipboard access to read URLs directly from the clipboard
 - Support for removing UTM parameters from URLs
+- Persistent storage for user preferences and settings
+- Multi-language support (English and Chinese)
+- Light and dark theme support
 
 ## Technologies Used
 
@@ -71,11 +74,14 @@ This will create a production-ready version of the extension in the `dist` folde
 - The extension will parse the URL and display its parameters.
 - Use the action buttons to manipulate the URL as needed.
 
-## Todo
+### Storage
+The extension automatically saves your preferences and settings using Chrome's storage API. Your data is stored locally in your browser.
 
-- LocalStroge
-- Multilaguage
-- Theme
+### Multi-language Support
+The extension supports both English and Chinese. You can also manually change the language in the options page.
+
+### Theme Support
+The extension supports both light and dark themes. You can manually change the theme in the options page.
 
 ## License
 
