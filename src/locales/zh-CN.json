@@ -1,30 +1,30 @@
 {
   "popup": {
     "title": "URL 工具",
-    "inputPlaceholder": "输入URL",
+    "inputPlaceholder": "输入 URL",
     "tooltips": {
-      "pasteCurrent": "粘贴当前页面URL",
-      "pasteClipboard": "粘贴剪贴板中的URL",
+      "pasteCurrent": "粘贴当前页面 URL",
+      "pasteClipboard": "粘贴剪贴板中的 URL",
       "removeParam": "删除参数",
-      "removeUTM": "删除UTM参数",
+      "removeUTM": "删除 UTM 参数",
       "openCurrent": "在当前标签页打开",
       "openNew": "在新标签页打开",
-      "copyURL": "复制修改后的URL"
+      "copyURL": "复制修改后的 URL"
     }
   },
   "options": {
     "title": "选项",
     "languageLabel": "语言",
-    "jsonLabel": "UTM参数JSON视图",
-    "jsonTooltip": "这里以JSON格式显示您的UTM参数。JSON是一种结构化的数据表示方式，人类和计算机都能理解。每个参数都以字符串形式列在数组中。",
-    "formatTooltip": "方括号[]表示数组，每个参数都用引号包裹。这种格式确保您的参数可以被扩展程序正确保存和使用。",
+    "jsonLabel": "UTM 参数 JSON 视图",
+    "jsonTooltip": "这里以 JSON 格式显示您的 UTM 参数。JSON 是一种结构化的数据表示方式，人类和计算机都能理解。每个参数都以字符串形式列在数组中。",
+    "formatTooltip": "方括号 [] 表示数组，每个参数都用引号包裹。这种格式确保您的参数可以被扩展程序正确保存和使用。",
     "addParam": {
-      "title": "添加UTM参数",
-      "placeholder": "输入新的UTM参数",
+      "title": "添加 UTM 参数",
+      "placeholder": "输入新的 UTM 参数",
       "button": "添加参数"
     },
     "editJson": {
-      "title": "编辑JSON",
+      "title": "编辑 JSON",
       "cancel": "取消",
       "save": "保存"
     },
