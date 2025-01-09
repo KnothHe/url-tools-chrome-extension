@@ -13,6 +13,9 @@
     }
   },
   "options": {
+    "themeLabel": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
     "title": "Options",
     "languageLabel": "Language",
     "jsonLabel": "UTM Parameters JSON View",

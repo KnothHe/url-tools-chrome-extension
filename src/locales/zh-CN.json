@@ -13,6 +13,9 @@
     }
   },
   "options": {
+    "themeLabel": "主题",
+    "themeLight": "浅色",
+    "themeDark": "深色",
     "title": "选项",
     "languageLabel": "语言",
     "jsonLabel": "UTM 参数 JSON 视图",

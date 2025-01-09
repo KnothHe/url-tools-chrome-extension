@@ -1,6 +1,7 @@
 export interface OptionSetting {
   utmParams: string[];
   lang: string;
+  theme: "light" | "dark";
 }
 
 export const loadInitialSettings = async () => {
@@ -9,7 +10,7 @@ export const loadInitialSettings = async () => {
       if (result.options) {
         resolve(result.options);
       } else {
-        resolve({ utmParams: [], lang: 'en' });
+        resolve({ utmParams: [], lang: 'en', theme: 'light' });
       }
     });
   });

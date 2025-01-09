@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "@/context/ThemeProvider";
+import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -36,8 +38,10 @@ import {
 import i18n from "@/i18n";
 
 function Options() {
+  const { theme, setTheme } = useTheme();
   const [utmParams, setUtmParams] = useState<string[]>([]);
   const [lang, setLang] = useState("en");
+  const [currentTheme, setCurrentTheme] = useState<"light" | "dark">(theme);
   const [newParam, setNewParam] = useState("");
   const [jsonView, setJsonView] = useState("");
   const { t } = useTranslation();
@@ -50,6 +54,10 @@ function Options() {
       if (optionSetting.lang) {
         i18n.changeLanguage(optionSetting.lang);
         setLang(optionSetting.lang);
+      }
+      if (optionSetting.theme) {
+        setTheme(optionSetting.theme);
+        setCurrentTheme(optionSetting.theme);
       }
       if (optionSetting.utmParams) {
         setUtmParams(optionSetting.utmParams);
@@ -72,20 +80,49 @@ function Options() {
   };
 
   const handleSave = async () => {
-    const optionSetting: OptionSetting = { utmParams, lang };
+    const optionSetting: OptionSetting = { utmParams, lang, theme: currentTheme };
     i18n.changeLanguage(lang);
+    setTheme(currentTheme);
     saveSettings(optionSetting).then(() => alert(t("options.saveSuccess")));
   };
 
   return (
     <div className="p-4 max-w-2xl mx-auto">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold mb-6 text-slate-600 underline">
+        <h1 className="text-2xl font-bold mb-6 text-foreground underline">
           {t("options.title")}
         </h1>
       </div>
 
       <div className="space-y-4">
+        <div className="space-y-2">
+          <Label>{t("options.themeLabel")}</Label>
+          <Select
+            value={currentTheme}
+            onValueChange={(newTheme: "light" | "dark") => {
+              setCurrentTheme(newTheme);
+              setTheme(newTheme);
+            }}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select theme" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="light">
+                <div className="flex items-center gap-2">
+                  <Sun className="h-4 w-4" />
+                  {t("options.themeLight")}
+                </div>
+              </SelectItem>
+              <SelectItem value="dark">
+                <div className="flex items-center gap-2">
+                  <Moon className="h-4 w-4" />
+                  {t("options.themeDark")}
+                </div>
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
         <div className="space-y-2">
           <Label>{t("options.languageLabel")}</Label>
           <Select
