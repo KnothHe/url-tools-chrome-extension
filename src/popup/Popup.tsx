@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  loadUTMParams,
   getCurrentTabURL,
   getClipboardURL,
   generateModifiedURL,
@@ -11,6 +10,9 @@ import {
   openURLInNewTab,
   openOptionsPage,
 } from "@/utils/popupService";
+import {
+  loadInitialSettings
+} from "@/utils/optionsService";
 import {
   Tooltip,
   TooltipTrigger,
@@ -30,15 +32,22 @@ import {
   Clipboard,
   Settings,
 } from "lucide-react";
+import { useTheme } from "@/context/ThemeProvider";
 
 function Popup() {
   const { t } = useTranslation();
+  const { setTheme } = useTheme();
   const [url, setUrl] = useState("");
   const [paramRecord, setParamRecord] = useState<Record<string, string>>({});
   const [utmParams, setUtmParams] = useState<string[]>([]);
 
   useEffect(() => {
-    loadUTMParams().then(setUtmParams);
+    loadInitialSettings().then(
+      (optionSetting) => {
+        setUtmParams(optionSetting.utmParams);
+        setTheme(optionSetting.theme);
+      }
+    );
   }, []);
 
   const handleParse = useCallback(async () => {
@@ -134,7 +143,7 @@ function Popup() {
   return (
     <>
       <TooltipProvider>
-        <div className="w-[600px] w-max-[800px] h-max[600px] bg-white p-4 rounded-lg shadow-lg">
+        <div className="w-[600px] w-max-[800px] h-max[600px] bg-background p-4 rounded-lg shadow-lg border border-border">
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-xl font-semibold">{t('popup.title')}</h1>
             <div className="flex items-center gap-2">
@@ -149,7 +158,7 @@ function Popup() {
           </div>
           <div className="flex flex-row items-center space-x-4">
             <Input
-              className="border p-2 rounded text-gray-700 flex-1"
+            className="border p-2 rounded text-foreground flex-1"
               placeholder={t('popup.inputPlaceholder')}
               value={url}
               onChange={(e) => setUrl(e.target.value)}
@@ -189,15 +198,15 @@ function Popup() {
                 key={key}
                 className="flex flex-row items-center space-x-2 mb-2"
               >
-                <div className="flex flex-row items-center space-x-2 w-full bg-gray-50 p-2 rounded-lg shadow-sm">
+                <div className="flex flex-row items-center space-x-2 w-full bg-background p-2 rounded-lg shadow-sm border border-border">
                   <div
-                    className="w-1/3 text-left truncate bg-gray-200 border border-gray-300 p-1 rounded"
+                    className="w-1/3 text-left truncate bg-muted border border-input p-1 rounded"
                     title={key}
                   >
                     <span className="font-semibold">{key}</span>
                   </div>
                   <div
-                    className="w-2/3 text-left truncate bg-gray-200 border border-gray-300 p-1 rounded"
+                    className="w-2/3 text-left truncate bg-muted border border-input p-1 rounded"
                     title={value}
                   >
                     <span>{value}</span>
@@ -205,7 +214,7 @@ function Popup() {
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
-                        className="bg-black text-white hover:bg-gray-700 flex-shrink-0 ml-2"
+                        className="bg-primary text-primary-foreground hover:bg-primary/90 flex-shrink-0 ml-2"
                         size="icon"
                         onClick={() => {
                           const newParamRecord = { ...paramRecord };
@@ -225,7 +234,7 @@ function Popup() {
             ))}
           </div>
           <div className="mt-4 flex flex-row items-center space-x-4">
-            <div className="bg-gray-100 p-2 rounded-lg shadow-sm text-nowrap overflow-auto flex-1">
+            <div className="bg-background p-2 rounded-lg shadow-sm text-nowrap overflow-auto flex-1 border border-border">
               <span className="break-all block w-full">{getModifiedURL()}</span>
             </div>
           </div>
@@ -233,7 +242,7 @@ function Popup() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  className="bg-black text-white hover:bg-gray-700 flex-shrink-0"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 flex-shrink-0"
                   size="icon"
                   onClick={handleRemoveUTMParameters}
                 >
@@ -247,7 +256,7 @@ function Popup() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  className="bg-black text-white hover:bg-gray-700 flex-shrink-0"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 flex-shrink-0"
                   size="icon"
                   onClick={async () => {
                     const modifiedURL = getModifiedURL();
@@ -266,7 +275,7 @@ function Popup() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  className="bg-black text-white hover:bg-gray-700 flex-shrink-0"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 flex-shrink-0"
                   size="icon"
                   onClick={async () => {
                     const modifiedURL = getModifiedURL();
@@ -285,7 +294,7 @@ function Popup() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  className="bg-black text-white hover:bg-gray-700 flex-shrink-0"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 flex-shrink-0"
                   size="icon"
                   onClick={handleCopyURL}
                 >

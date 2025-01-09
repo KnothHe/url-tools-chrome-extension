@@ -2,9 +2,9 @@ import { removeUTMParameters } from "@/utils/urlParser";
 
 export const loadUTMParams = async () => {
   return new Promise<string[]>((resolve) => {
-    chrome.storage.local.get(['utmParams'], (result) => {
-      if (result.utmParams) {
-        resolve(result.utmParams);
+    chrome.storage.local.get(["options"], (result) => {
+      if (result.options) {
+        resolve(result.options);
       } else {
         resolve([]);
       }
