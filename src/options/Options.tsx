@@ -64,7 +64,7 @@ function Options() {
         setJsonView(updateJsonView(optionSetting.utmParams));
       }
     });
-  }, [setTheme]);
+  }, []);
 
   // Update JSON view when UTM params change
   useEffect(() => {

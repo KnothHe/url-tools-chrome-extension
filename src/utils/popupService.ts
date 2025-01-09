@@ -1,18 +1,5 @@
 import { removeUTMParameters } from "@/utils/urlParser";
 
-export const loadUTMParams = async () => {
-  return new Promise<string[]>((resolve) => {
-    chrome.storage.local.get(["options"], (result) => {
-      if (result.options) {
-        resolve(result.options);
-      } else {
-        resolve([]);
-      }
-    });
-  });
-};
-
-
 export const getCurrentTabURL = async () => {
   const tabs = await chrome.tabs.query({
     active: true,

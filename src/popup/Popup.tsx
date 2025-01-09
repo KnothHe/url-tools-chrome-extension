@@ -48,7 +48,7 @@ function Popup() {
         setTheme(optionSetting.theme);
       }
     );
-  }, [setTheme]);
+  }, []);
 
   const handleParse = useCallback(async () => {
     if (url) {
