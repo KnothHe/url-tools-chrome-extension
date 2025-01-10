@@ -11,7 +11,8 @@ import {
   openOptionsPage,
 } from "@/utils/popupService";
 import {
-  loadInitialSettings
+  loadInitialSettings,
+  saveSettings
 } from "@/utils/optionsService";
 import {
   Tooltip,
@@ -123,6 +124,24 @@ function Popup() {
     }
   };
 
+  const handleAddUTMParameter = async (key: string) => {
+    if (!utmParams.includes(key)) {
+      const newUtmParams = [...utmParams, key];
+      setUtmParams(newUtmParams);
+      try {
+        await loadInitialSettings().then((settings) => {
+          return saveSettings({ ...settings, utmParams: newUtmParams });
+        });
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.log("Failed to save UTM parameter:", error.message);
+        } else {
+          console.log("Failed to save UTM parameter");
+        }
+      }
+    }
+  };
+
   const handleRemoveUTMParameters = () => {
     if (url) {
       try {
@@ -214,7 +233,21 @@ function Popup() {
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
-                        className="bg-primary text-primary-foreground hover:bg-primary/90 flex-shrink-0 ml-2"
+                        className="bg-primary text-primary-foreground hover:bg-primary/90 flex-shrink-0"
+                        size="icon"
+                        onClick={() => handleAddUTMParameter(key)}
+                      >
+                        <PlusSquare className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{t('popup.tooltips.addToUTM')}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90 flex-shrink-0"
                         size="icon"
                         onClick={() => {
                           const newParamRecord = { ...paramRecord };

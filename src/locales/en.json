@@ -9,7 +9,8 @@
       "removeUTM": "Remove UTM parameters",
       "openCurrent": "Open in current tab",
       "openNew": "Open in new tab",
-      "copyURL": "Copy modified URL"
+      "copyURL": "Copy modified URL",
+      "addToUTM": "Add this parameter to UTM tracking list"
     }
   },
   "options": {
