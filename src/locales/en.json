@@ -10,7 +10,8 @@
       "openCurrent": "Open in current tab",
       "openNew": "Open in new tab",
       "copyURL": "Copy modified URL",
-      "addToUTM": "Add this parameter to UTM tracking list"
+      "addToUTM": "Add this parameter to UTM tracking list",
+      "togglePlusSquare": "Toggle Plus Button Visibility"
     }
   },
   "options": {

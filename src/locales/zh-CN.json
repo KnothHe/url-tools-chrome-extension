@@ -10,7 +10,8 @@
       "openCurrent": "在当前标签页打开",
       "openNew": "在新标签页打开",
       "copyURL": "复制修改后的 URL",
-      "addToUTM": "将此参数添加到 UTM 跟踪列表"
+      "addToUTM": "将此参数添加到 UTM 跟踪列表",
+      "togglePlusSquare": "切换加号按钮显示"
     }
   },
   "options": {

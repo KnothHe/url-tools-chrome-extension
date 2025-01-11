@@ -10,10 +10,7 @@ import {
   openURLInNewTab,
   openOptionsPage,
 } from "@/utils/popupService";
-import {
-  loadInitialSettings,
-  saveSettings
-} from "@/utils/optionsService";
+import { loadInitialSettings, saveSettings } from "@/utils/optionsService";
 import {
   Tooltip,
   TooltipTrigger,
@@ -22,16 +19,18 @@ import {
 } from "@/components/ui/tooltip";
 import { getURLParameters } from "@/utils/urlParser";
 import { useEffect, useState, useCallback } from "react";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import {
   Trash2,
   Copy,
   FilterX,
   ExternalLink,
-  PlusSquare,
+  Eye,
+  EyeOff,
   Link,
   Clipboard,
   Settings,
+  PlusSquare,
 } from "lucide-react";
 import { useTheme } from "@/context/ThemeProvider";
 
@@ -41,14 +40,13 @@ function Popup() {
   const [url, setUrl] = useState("");
   const [paramRecord, setParamRecord] = useState<Record<string, string>>({});
   const [utmParams, setUtmParams] = useState<string[]>([]);
+  const [showPlusSquare, setShowPlusSquare] = useState(true);
 
   useEffect(() => {
-    loadInitialSettings().then(
-      (optionSetting) => {
-        setUtmParams(optionSetting.utmParams);
-        setTheme(optionSetting.theme);
-      }
-    );
+    loadInitialSettings().then((optionSetting) => {
+      setUtmParams(optionSetting.utmParams);
+      setTheme(optionSetting.theme);
+    });
   }, []);
 
   const handleParse = useCallback(async () => {
@@ -164,7 +162,7 @@ function Popup() {
       <TooltipProvider>
         <div className="w-[600px] w-max-[800px] h-max[600px] bg-background p-4 rounded-lg shadow-lg border border-border">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-xl font-semibold">{t('popup.title')}</h1>
+            <h1 className="text-xl font-semibold">{t("popup.title")}</h1>
             <div className="flex items-center gap-2">
               <Button
                 variant="ghost"
@@ -177,8 +175,8 @@ function Popup() {
           </div>
           <div className="flex flex-row items-center space-x-4">
             <Input
-            className="border p-2 rounded text-foreground flex-1"
-              placeholder={t('popup.inputPlaceholder')}
+              className="border p-2 rounded text-foreground flex-1"
+              placeholder={t("popup.inputPlaceholder")}
               value={url}
               onChange={(e) => setUrl(e.target.value)}
             />
@@ -193,7 +191,7 @@ function Popup() {
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>{t('popup.tooltips.pasteCurrent')}</p>
+                <p>{t("popup.tooltips.pasteCurrent")}</p>
               </TooltipContent>
             </Tooltip>
             <Tooltip>
@@ -207,7 +205,7 @@ function Popup() {
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>{t('popup.tooltips.pasteClipboard')}</p>
+                <p>{t("popup.tooltips.pasteClipboard")}</p>
               </TooltipContent>
             </Tooltip>
           </div>
@@ -232,16 +230,18 @@ function Popup() {
                   </div>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button
-                        className="bg-primary text-primary-foreground hover:bg-primary/90 flex-shrink-0"
-                        size="icon"
-                        onClick={() => handleAddUTMParameter(key)}
-                      >
-                        <PlusSquare className="h-4 w-4" />
-                      </Button>
+                      {showPlusSquare && (
+                        <Button
+                          className="bg-primary text-primary-foreground hover:bg-primary/90 flex-shrink-0"
+                          size="icon"
+                          onClick={() => handleAddUTMParameter(key)}
+                        >
+                          <PlusSquare className="h-4 w-4" />
+                        </Button>
+                      )}
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>{t('popup.tooltips.addToUTM')}</p>
+                      <p>{t("popup.tooltips.addToUTM")}</p>
                     </TooltipContent>
                   </Tooltip>
                   <Tooltip>
@@ -259,7 +259,7 @@ function Popup() {
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>{t('popup.tooltips.removeParam')}</p>
+                      <p>{t("popup.tooltips.removeParam")}</p>
                     </TooltipContent>
                   </Tooltip>
                 </div>
@@ -277,13 +277,27 @@ function Popup() {
                 <Button
                   className="bg-primary text-primary-foreground hover:bg-primary/90 flex-shrink-0"
                   size="icon"
+                  onClick={() => setShowPlusSquare(!showPlusSquare)}
+                >
+                  {showPlusSquare ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{t("popup.tooltips.togglePlusSquare")}</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 flex-shrink-0"
+                  size="icon"
                   onClick={handleRemoveUTMParameters}
                 >
                   <FilterX className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>{t('popup.tooltips.removeUTM')}</p>
+                <p>{t("popup.tooltips.removeUTM")}</p>
               </TooltipContent>
             </Tooltip>
             <Tooltip>
@@ -302,7 +316,7 @@ function Popup() {
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>{t('popup.tooltips.openCurrent')}</p>
+                <p>{t("popup.tooltips.openCurrent")}</p>
               </TooltipContent>
             </Tooltip>
             <Tooltip>
@@ -321,7 +335,7 @@ function Popup() {
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>{t('popup.tooltips.openNew')}</p>
+                <p>{t("popup.tooltips.openNew")}</p>
               </TooltipContent>
             </Tooltip>
             <Tooltip>
@@ -335,7 +349,7 @@ function Popup() {
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>{t('popup.tooltips.copyURL')}</p>
+                <p>{t("popup.tooltips.copyURL")}</p>
               </TooltipContent>
             </Tooltip>
           </div>
@@ -346,4 +360,3 @@ function Popup() {
 }
 
 export default Popup;
-
