@@ -40,12 +40,13 @@ function Popup() {
   const [url, setUrl] = useState("");
   const [paramRecord, setParamRecord] = useState<Record<string, string>>({});
   const [utmParams, setUtmParams] = useState<string[]>([]);
-  const [showPlusSquare, setShowPlusSquare] = useState(true);
+  const [showAddUtmButton, setShowAddUtmButton] = useState(true);
 
   useEffect(() => {
     loadInitialSettings().then((optionSetting) => {
       setUtmParams(optionSetting.utmParams);
       setTheme(optionSetting.theme);
+      setShowAddUtmButton(optionSetting.showAddUtmButton ?? true);
     });
   }, []);
 
@@ -140,6 +141,22 @@ function Popup() {
     }
   };
 
+  const handleShowAddUtmButton = async () => {
+    const newShowAddUtmButton = !showAddUtmButton;
+    setShowAddUtmButton(newShowAddUtmButton);
+    try {
+      await loadInitialSettings().then((settings) => {
+        return saveSettings({ ...settings, showAddUtmButton: newShowAddUtmButton });
+      });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log("Failed to toggle show add UTM parameter:", error.message);
+      } else {
+        console.log("Failed to toggle show add UTM parameter");
+      }
+    }
+  };
+
   const handleRemoveUTMParameters = () => {
     if (url) {
       try {
@@ -230,7 +247,7 @@ function Popup() {
                   </div>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      {showPlusSquare && (
+                      {showAddUtmButton && (
                         <Button
                           className="bg-primary text-primary-foreground hover:bg-primary/90 flex-shrink-0"
                           size="icon"
@@ -277,9 +294,13 @@ function Popup() {
                 <Button
                   className="bg-primary text-primary-foreground hover:bg-primary/90 flex-shrink-0"
                   size="icon"
-                  onClick={() => setShowPlusSquare(!showPlusSquare)}
+                  onClick={() => handleShowAddUtmButton()}
                 >
-                  {showPlusSquare ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                  {showAddUtmButton ? (
+                    <Eye className="h-4 w-4" />
+                  ) : (
+                    <EyeOff className="h-4 w-4" />
+                  )}
                 </Button>
               </TooltipTrigger>
               <TooltipContent>

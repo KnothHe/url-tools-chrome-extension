@@ -2,6 +2,7 @@ export interface OptionSetting {
   utmParams: string[];
   lang: string;
   theme: "light" | "dark";
+  showAddUtmButton: boolean;
 }
 
 export const loadInitialSettings = async () => {
@@ -10,7 +11,7 @@ export const loadInitialSettings = async () => {
       if (result.options) {
         resolve(result.options);
       } else {
-        resolve({ utmParams: [], lang: 'en', theme: 'light' });
+        resolve({ utmParams: [], lang: 'en', theme: 'light', showAddUtmButton: true });
       }
     });
   });

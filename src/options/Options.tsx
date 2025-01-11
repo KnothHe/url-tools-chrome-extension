@@ -47,6 +47,7 @@ function Options() {
   const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState("");
+  const [showAddUtmButton, setShowAddUtmButton] = useState(true);
 
   // Load initial settings
   useEffect(() => {
@@ -62,6 +63,9 @@ function Options() {
       if (optionSetting.utmParams) {
         setUtmParams(optionSetting.utmParams);
         setJsonView(updateJsonView(optionSetting.utmParams));
+      }
+      if (optionSetting.showAddUtmButton) {
+        setShowAddUtmButton(optionSetting.showAddUtmButton);
       }
     });
   }, []);
@@ -80,7 +84,12 @@ function Options() {
   };
 
   const handleSave = async () => {
-    const optionSetting: OptionSetting = { utmParams, lang, theme: currentTheme };
+    const optionSetting: OptionSetting = {
+      utmParams,
+      lang,
+      theme: currentTheme,
+      showAddUtmButton: showAddUtmButton,
+    };
     i18n.changeLanguage(lang);
     setTheme(currentTheme);
     saveSettings(optionSetting).then(() => alert(t("options.saveSuccess")));
